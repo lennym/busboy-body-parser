@@ -26,6 +26,9 @@ This is defined similarly to the `limit` option in [body-parser](https://www.npm
 var busboyBodyParser = require('busboy-body-parser');
 app.use(busboyBodyParser({ limit: '5mb' }));
 ```
+
+This limit can be defined as either a number of bytes, or any string supported by [bytes](https://www.npmjs.org/package/bytes) - eg. `'5mb'`, `'500kb'`.
+
 ## Output
 
 The middleware will add files to `req.files` in the following form:
