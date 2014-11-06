@@ -1,10 +1,12 @@
 {
   "name": "busboy-body-parser",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./test/index.js"
   },
+  "license": "MIT",
+  "repository": "lennym/busboy-body-parser",
   "dependencies": {
     "busboy": "^0.2.9",
     "bytes": "^1.0.0",
