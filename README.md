@@ -42,6 +42,22 @@ The middleware will add files to `req.files` in the following form:
     }
 }
 ```
+
+If a file has exceeded the file-size limit defined above it will have `null` data and `truncated: true`:
+
+```
+// req.files:
+{
+    fieldName: {
+        data: null,
+        name: "largefile.txt",
+        encoding: "utf8,
+        mimetype: "text/plain",
+        truncated: true
+    }
+}
+```
+
 ## Tests
 
 `npm test`
