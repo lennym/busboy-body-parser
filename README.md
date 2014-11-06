@@ -36,7 +36,7 @@ The middleware will add files to `req.files` in the following form:
     fieldName: {
         data: "raw file data",
         name: "upload.txt",
-        encoding: "utf8,
+        encoding: "utf8",
         mimetype: "text/plain",
         truncated: false
     }
@@ -51,7 +51,7 @@ If a file has exceeded the file-size limit defined above it will have `data: nul
     fieldName: {
         data: null,
         name: "largefile.txt",
-        encoding: "utf8,
+        encoding: "utf8",
         mimetype: "text/plain",
         truncated: true
     }
