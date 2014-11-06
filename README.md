@@ -43,7 +43,7 @@ The middleware will add files to `req.files` in the following form:
 }
 ```
 
-If a file has exceeded the file-size limit defined above it will have `null` data and `truncated: true`:
+If a file has exceeded the file-size limit defined above it will have `data: null` and `truncated: true`:
 
 ```
 // req.files:
