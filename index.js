@@ -33,7 +33,8 @@ module.exports = function (settings) {
                         name: name,
                         encoding: enc,
                         mimetype: mimetype,
-                        truncated: file.truncated
+                        truncated: file.truncated,
+                        size: Buffer.byteLength(d.toString('binary'), 'binary')
                     };
                 }));
             });
