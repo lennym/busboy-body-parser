@@ -1,7 +1,7 @@
 var Busboy = require('busboy'),
     bytes = require('bytes'),
     concat = require('concat-stream'),
-    debug = require('debug')('busboy-bodyparser');
+    debug = require('debug')('busboy-body-parser');
 
 module.exports = function (settings) {
 
