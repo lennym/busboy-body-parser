@@ -1,6 +1,6 @@
 {
   "name": "busboy-body-parser",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./test/index.js"
@@ -19,5 +19,11 @@
     "sinon": "^1.11.1",
     "sinon-chai": "^2.6.0"
   },
-  "keywords": ["multipart", "body-parser", "middleware", "busboy", "express"]
+  "keywords": [
+    "multipart",
+    "body-parser",
+    "middleware",
+    "busboy",
+    "express"
+  ]
 }
