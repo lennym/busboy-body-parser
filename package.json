@@ -9,7 +9,7 @@
   "repository": "lennym/busboy-body-parser",
   "dependencies": {
     "busboy": "^0.2.9",
-    "bytes": "^1.0.0",
+    "bytes": "^2.0.0",
     "concat-stream": "^1.4.6",
     "debug": "^2.1.0"
   },
