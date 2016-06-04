@@ -27,15 +27,16 @@ module.exports = function (settings) {
             });
             busboy.on('file', function (key, file, name, enc, mimetype) {
                 file.pipe(concat(function (d) {
-                    debug('Received file %s', file);
-                    req.files[key] = {
+                    debug('Received file %s on key %s', name, key);
+                    if (req.files[key] === undefined) req.files[key] = [];
+                    req.files[key].push({
                         data: file.truncated ? null : d,
                         name: name,
                         encoding: enc,
                         mimetype: mimetype,
                         truncated: file.truncated,
                         size: Buffer.byteLength(d.toString('binary'), 'binary')
-                    };
+                    });
                 }));
             });
             busboy.on('finish', function () {
