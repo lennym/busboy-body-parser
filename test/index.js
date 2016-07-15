@@ -44,7 +44,26 @@ describe('multipart form parser', function () {
         req.pipe.args[0][0].should.be.an.instanceOf(Busboy);
     });
 
-   it('creates req.body and req.files as empty objects if they does not exist', function (done) {
+    it('handles a busboy error if the payload is invalid', function (done) {
+        var busboyError = new Error('busboy error');
+        Busboy.prototype.on.withArgs('error').yieldsAsync(busboyError);
+        parser(req, res, function (err) {
+            err.should.equal(busboyError);
+            done();
+        });
+    });
+
+    it('handles a busboy error if the headers are invalid', function (done) {
+        req.headers = {
+            'content-type': 'multipart/form-data',
+        };
+        parser(req, res, function (err) {
+            err.should.be.instanceOf(Error);
+            done();
+        });
+    });
+
+    it('creates req.body and req.files as empty objects if they do not exist', function (done) {
         Busboy.prototype.on.withArgs('finish').yieldsAsync();
         parser(req, res, function () {
             req.body.should.eql({});
@@ -81,6 +100,7 @@ describe('multipart form parser', function () {
                 name: 'test.jpg',
                 encoding: 'binary',
                 mimetype: 'image/jpeg',
+                size: 6,
                 truncated: false
             });
             done();
@@ -104,6 +124,7 @@ describe('multipart form parser', function () {
                 name: 'test.jpg',
                 encoding: 'binary',
                 mimetype: 'image/jpeg',
+                size: 6,
                 truncated: true
             });
             done();
