@@ -15,12 +15,17 @@ module.exports = function (settings) {
     return function multipartBodyParser(req, res, next) {
 
         if (req.is('multipart/form-data')) {
-            var busboy = new Busboy({
-                headers: req.headers,
-                limits: {
-                    fileSize: settings.limit
-                }
-            });
+            var busboy;
+            try {
+                busboy = new Busboy({
+                    headers: req.headers,
+                    limits: {
+                        fileSize: settings.limit
+                    }
+                });
+            } catch (err) {
+                return next(err);
+            }
             busboy.on('field', function (key, value) {
                 debug('Received field %s: %s', key, value);
                 req.body[key] = value;
@@ -38,7 +43,15 @@ module.exports = function (settings) {
                     };
                 }));
             });
+            var error;
+            busboy.on('error', function (err) {
+                debug('Error parsing form');
+                debug(err);
+                error = err;
+                next(err);
+            });
             busboy.on('finish', function () {
+                if (error) { return; }
                 debug('Finished form parsing');
                 debug(req.body);
                 next();
