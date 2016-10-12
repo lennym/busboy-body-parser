@@ -7,6 +7,7 @@ module.exports = function (settings) {
 
     settings = settings || {};
     settings.limit = settings.limit || Math.Infinity;
+    settings.multi = settings.multi || false;
 
     if (typeof settings.limit === 'string') {
         settings.limit = bytes(settings.limit);
@@ -32,8 +33,7 @@ module.exports = function (settings) {
             });
             busboy.on('file', function (key, file, name, enc, mimetype) {
                 file.pipe(concat(function (d) {
-                    debug('Received file %s', file);
-                    req.files[key] = {
+                    var fileData = {
                         data: file.truncated ? null : d,
                         name: name,
                         encoding: enc,
@@ -41,6 +41,17 @@ module.exports = function (settings) {
                         truncated: file.truncated,
                         size: Buffer.byteLength(d.toString('binary'), 'binary')
                     };
+
+                    debug('Received file %s', file);
+
+                    if (settings.multi) {
+                        if (req.files[key] === undefined) {
+                            req.files[key] = [];
+                        }
+                        req.files[key].push(fileData);
+                    } else {
+                        req.files[key] = fileData;
+                    }
                 }));
             });
             var error;

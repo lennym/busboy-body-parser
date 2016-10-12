@@ -28,6 +28,15 @@ app.use(busboyBodyParser({ limit: '5mb' }));
 
 This limit can be defined as either a number of bytes, or any string supported by [bytes](https://www.npmjs.org/package/bytes) - eg. `'5mb'`, `'500kb'`.
 
+### Allow multiple files on a given request
+
+Multiple files with the same key is supported with the `multi` option, hence making `req.files[key]` an array instead of an object.
+
+```javascript
+var busboyBodyParser = require('busboy-body-parser');
+app.use(busboyBodyParser({ multi: true }));
+```
+
 ## Output
 
 The middleware will add files to `req.files` in the following form:
@@ -57,6 +66,21 @@ If a file has exceeded the file-size limit defined above it will have `data: nul
         mimetype: "text/plain",
         truncated: true
     }
+}
+```
+
+If the `multi` property is set:
+
+```
+// req.files:
+{
+    fieldName: [{
+        data: "raw file data",
+        name: "upload.txt",
+        encoding: "utf8",
+        mimetype: "text/plain",
+        truncated: false
+    }]
 }
 ```
 

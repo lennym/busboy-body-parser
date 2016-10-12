@@ -131,4 +131,47 @@ describe('multipart form parser', function () {
         });
     });
 
+    it('sets files as an array to handle multiple attachments', function (done) {
+        var file = {
+                pipe: function (s) {
+                    s.end('abc123');
+                    Busboy.prototype.on.withArgs('file').args[0][1]('key', file2, 'test2.jpg', 'binary', 'image/jpeg');
+                },
+                truncated: false
+            },
+            file2 = {
+                pipe: function (s) {
+                    s.end('xyz789');
+                    // ensure 'finish' event fires after files are processed
+                    process.nextTick(Busboy.prototype.on.withArgs('finish').args[0][1]);
+                },
+                truncated: false
+            };
+
+        parser = bodyparser({multi: true});
+        Busboy.prototype.on.withArgs('file').yieldsAsync('key', file, 'test.jpg', 'binary', 'image/jpeg');
+        parser(req, res, function () {
+            req.files.should.have.property('key');
+            req.files.key.should.length(2);
+            req.files.key[0].should.eql({
+                data: 'abc123',
+                name: 'test.jpg',
+                encoding: 'binary',
+                mimetype: 'image/jpeg',
+                size: 6,
+                truncated: false
+            });
+            req.files.key[1].should.eql({
+                data: 'xyz789',
+                name: 'test2.jpg',
+                encoding: 'binary',
+                mimetype: 'image/jpeg',
+                size: 6,
+                truncated: false
+            });
+
+            done();
+        });
+    })
+
 });
