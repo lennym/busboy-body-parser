@@ -13,7 +13,7 @@ It will add regular fields to req.body as per [body-parser](https://www.npmjs.or
 ### Basic usage
 
 ```javascript
-var busboyBodyParser = require('busboy-body-parser');
+const busboyBodyParser = require('busboy-body-parser');
 app.use(busboyBodyParser());
 ```
 
@@ -22,20 +22,22 @@ app.use(busboyBodyParser());
 This is defined similarly to the `limit` option in [body-parser](https://www.npmjs.org/package/body-parser) but is applied to individual files rather than the total body size.
 
 ```javascript
-var busboyBodyParser = require('busboy-body-parser');
+const busboyBodyParser = require('busboy-body-parser');
 app.use(busboyBodyParser({ limit: '5mb' }));
 ```
 
 This limit can be defined as either a number of bytes, or any string supported by [bytes](https://www.npmjs.org/package/bytes) - eg. `'5mb'`, `'500kb'`.
 
-### Allow multiple files on a given request
+### Uploading multiple files with the same key
 
-Multiple files with the same key is supported with the `multi` option, hence making `req.files[key]` an array instead of an object.
+The upload of multiple files with the same key is not enabled by default. If you wish to support this you will need to set the `multi` option to true.
 
 ```javascript
-var busboyBodyParser = require('busboy-body-parser');
+const busboyBodyParser = require('busboy-body-parser');
 app.use(busboyBodyParser({ multi: true }));
 ```
+
+_Important note_: if `multi` is set to true, then all `req.files[key]` will *always* be an array, irrespective of the nuber of files associated with that key.
 
 ## Output
 

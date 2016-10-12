@@ -45,9 +45,7 @@ module.exports = function (settings) {
                     debug('Received file %s', file);
 
                     if (settings.multi) {
-                        if (req.files[key] === undefined) {
-                            req.files[key] = [];
-                        }
+                        req.files[key] = req.files[key] || [];
                         req.files[key].push(fileData);
                     } else {
                         req.files[key] = fileData;
