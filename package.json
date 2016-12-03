@@ -8,9 +8,11 @@
   "license": "MIT",
   "repository": "lennym/busboy-body-parser",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "busboy": "^0.2.9",
     "bytes": "^2.0.0",
     "concat-stream": "^1.4.6",
+    "connect": "^3.5.0",
     "debug": "^2.1.0"
   },
   "devDependencies": {

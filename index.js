@@ -8,6 +8,7 @@ module.exports = function (settings) {
     settings = settings || {};
     settings.limit = settings.limit || Math.Infinity;
     settings.multi = settings.multi || false;
+    settings.bodyParserFallback = settings.bodyParserFallback || false;
 
     if (typeof settings.limit === 'string') {
         settings.limit = bytes(settings.limit);
@@ -69,7 +70,19 @@ module.exports = function (settings) {
             req.body = req.body || {};
             req.pipe(busboy);
         } else {
-            next();
+            if ( settings.bodyParserFallback ) {
+                var connect = require('connect'),
+                    bodyParser = require('body-parser'),
+                    ensureBody = false;
+
+                if ( connect && bodyParser )
+                    ensureBody = connect()
+                                .use(bodyParser.json())
+                                .use(bodyParser.urlencoded({extended: true}));
+
+                if ( ensureBody ) ensureBody( req, res, next );
+                else next();
+            } else next();
         }
 
     };
