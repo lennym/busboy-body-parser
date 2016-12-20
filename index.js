@@ -1,7 +1,8 @@
 var Busboy = require('busboy'),
     bytes = require('bytes'),
     concat = require('concat-stream'),
-    debug = require('debug')('busboy-body-parser');
+    debug = require('debug')('busboy-body-parser'),
+    buffer = require('buffer');
 
 module.exports = function (settings) {
 
@@ -34,7 +35,7 @@ module.exports = function (settings) {
             busboy.on('file', function (key, file, name, enc, mimetype) {
                 file.pipe(concat(function (d) {
                     var size = -1;
-                    if (d.length < Buffer.kMaxLength) {
+                    if (d.length < buffer.kMaxLength) {
                         size = Buffer.byteLength(d.toString('binary'), 'binary');
                     }
 
