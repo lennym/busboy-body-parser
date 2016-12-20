@@ -3,14 +3,23 @@ var Busboy = require('busboy'),
     concat = require('concat-stream'),
     debug = require('debug')('busboy-body-parser');
 
+var HARDLIMIT = bytes('250mb');
+
 module.exports = function (settings) {
 
     settings = settings || {};
-    settings.limit = settings.limit || Math.Infinity;
+    settings.limit = settings.limit || HARDLIMIT;
     settings.multi = settings.multi || false;
 
     if (typeof settings.limit === 'string') {
         settings.limit = bytes(settings.limit);
+    }
+
+    if (settings.limit > HARDLIMIT) {
+        console.error('WARNING: busboy-body-parser file size limit set too high');
+        console.error('busboy-body-parser can only handle files up to ' + HARDLIMIT + ' bytes');
+        console.error('to handle larger files you should use a streaming solution.');
+        settings.limit = HARDLIMIT;
     }
 
     return function multipartBodyParser(req, res, next) {
@@ -39,7 +48,7 @@ module.exports = function (settings) {
                         encoding: enc,
                         mimetype: mimetype,
                         truncated: file.truncated,
-                        size: Buffer.byteLength(d.toString('binary'), 'binary')
+                        size: file.truncated ? null : Buffer.byteLength(d, 'binary')
                     };
 
                     debug('Received file %s', file);
