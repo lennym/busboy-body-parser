@@ -1,7 +1,6 @@
 var Busboy = require('busboy'),
     bytes = require('bytes'),
     concat = require('concat-stream'),
-    buffer = require('buffer'),
     debug = require('debug')('busboy-body-parser');
 
 var HARDLIMIT = bytes('250mb');
