@@ -33,13 +33,18 @@ module.exports = function (settings) {
             });
             busboy.on('file', function (key, file, name, enc, mimetype) {
                 file.pipe(concat(function (d) {
+                    var size = -1;
+                    if (d.length < Buffer.kMaxLength) {
+                        size = Buffer.byteLength(d.toString('binary'), 'binary');
+                    }
+
                     var fileData = {
                         data: file.truncated ? null : d,
                         name: name,
                         encoding: enc,
                         mimetype: mimetype,
                         truncated: file.truncated,
-                        size: Buffer.byteLength(d.toString('binary'), 'binary')
+                        size: size
                     };
 
                     debug('Received file %s', file);
