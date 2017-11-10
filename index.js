@@ -1,6 +1,6 @@
 var Busboy = require('busboy'),
     bytes = require('bytes'),
-    concat = require('concat-stream'),
+    bl = require('bl'),
     debug = require('debug')('busboy-body-parser');
 
 var HARDLIMIT = bytes('250mb');
@@ -41,7 +41,8 @@ module.exports = function (settings) {
                 req.body[key] = value;
             });
             busboy.on('file', function (key, file, name, enc, mimetype) {
-                file.pipe(concat(function (d) {
+                file.pipe(bl(function (err, d) {
+                    if (err || !name) { return; }
                     var fileData = {
                         data: file.truncated ? null : d,
                         name: name,
