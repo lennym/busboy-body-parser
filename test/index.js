@@ -96,7 +96,7 @@ describe('multipart form parser', function () {
         parser(req, res, function () {
             req.files.should.have.property('key');
             req.files.key.should.eql({
-                data: 'abc123',
+                data: Buffer('abc123'),
                 name: 'test.jpg',
                 encoding: 'binary',
                 mimetype: 'image/jpeg',
@@ -154,7 +154,7 @@ describe('multipart form parser', function () {
             req.files.should.have.property('key');
             req.files.key.should.length(2);
             req.files.key[0].should.eql({
-                data: 'abc123',
+                data: Buffer('abc123'),
                 name: 'test.jpg',
                 encoding: 'binary',
                 mimetype: 'image/jpeg',
@@ -162,7 +162,7 @@ describe('multipart form parser', function () {
                 truncated: false
             });
             req.files.key[1].should.eql({
-                data: 'xyz789',
+                data: Buffer('xyz789'),
                 name: 'test2.jpg',
                 encoding: 'binary',
                 mimetype: 'image/jpeg',
@@ -172,6 +172,46 @@ describe('multipart form parser', function () {
 
             done();
         });
-    })
+    });
+
+    it('can handle empty payloads', function (done) {
+        var file = {
+            pipe: function (s) {
+                s.end();
+                // ensure 'finish' event fires after files are processed
+                process.nextTick(Busboy.prototype.on.withArgs('finish').args[0][1]);
+            },
+            truncated: false
+        };
+        Busboy.prototype.on.withArgs('file').yieldsAsync('key', file, '', '7bit', 'application/octet-stream');
+        parser(req, res, function () {
+            req.files.should.eql({});
+            done();
+        });
+    });
+
+    it('can handle empty files', function (done) {
+        var file = {
+            pipe: function (s) {
+                s.end();
+                // ensure 'finish' event fires after files are processed
+                process.nextTick(Busboy.prototype.on.withArgs('finish').args[0][1]);
+            },
+            truncated: false
+        };
+        Busboy.prototype.on.withArgs('file').yieldsAsync('key', file, 'test.jpg', 'binary', 'image/jpeg');
+        parser(req, res, function () {
+            req.files.should.have.property('key');
+            req.files.key.should.eql({
+                data: Buffer(''),
+                name: 'test.jpg',
+                encoding: 'binary',
+                mimetype: 'image/jpeg',
+                size: 0,
+                truncated: false
+            });
+            done();
+        });
+    });
 
 });

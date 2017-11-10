@@ -8,13 +8,14 @@
   "license": "MIT",
   "repository": "lennym/busboy-body-parser",
   "dependencies": {
+    "bl": "^1.2.1",
     "busboy": "^0.2.9",
     "bytes": "^2.0.0",
-    "concat-stream": "^1.4.6",
     "debug": "^2.1.0"
   },
   "devDependencies": {
     "chai": "^1.9.2",
+    "express": "^4.16.2",
     "mocha": "^2.0.1",
     "sinon": "^1.11.1",
     "sinon-chai": "^2.6.0"

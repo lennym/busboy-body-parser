@@ -47,7 +47,7 @@ The middleware will add files to `req.files` in the following form:
 // req.files:
 {
     fieldName: {
-        data: "raw file data",
+        data: Buffer("raw file data"),
         name: "upload.txt",
         encoding: "utf8",
         mimetype: "text/plain",
@@ -77,7 +77,7 @@ If the `multi` property is set:
 // req.files:
 {
     fieldName: [{
-        data: "raw file data",
+        data: Buffer("raw file data"),
         name: "upload.txt",
         encoding: "utf8",
         mimetype: "text/plain",
