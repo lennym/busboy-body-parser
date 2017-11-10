@@ -1,6 +1,6 @@
 {
   "name": "busboy-body-parser",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./test/index.js"
