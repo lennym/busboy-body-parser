@@ -214,4 +214,28 @@ describe('multipart form parser', function () {
         });
     });
 
+    it('can handle files without a name', function (done) {
+        var file = {
+            pipe: function (s) {
+                s.end('abc123');
+                // ensure 'finish' event fires after files are processed
+                process.nextTick(Busboy.prototype.on.withArgs('finish').args[0][1]);
+            },
+            truncated: true
+        };
+        Busboy.prototype.on.withArgs('file').yieldsAsync('key', file, undefined, '7bit', 'application/octet-stream');
+        parser(req, res, function () {
+            req.files.should.have.property('key');
+            req.files.key.should.eql({
+                data: null,
+                name: null,
+                encoding: '7bit',
+                mimetype: 'application/octet-stream',
+                size: null,
+                truncated: true
+            });
+            done();
+        });
+    });
+
 });
