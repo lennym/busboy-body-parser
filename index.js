@@ -42,10 +42,10 @@ module.exports = function (settings) {
             });
             busboy.on('file', function (key, file, name, enc, mimetype) {
                 file.pipe(bl(function (err, d) {
-                    if (err || !name) { return; }
+                    if (err || !(d.length || name)) { return; }
                     var fileData = {
                         data: file.truncated ? null : d,
-                        name: name,
+                        name: name || null,
                         encoding: enc,
                         mimetype: mimetype,
                         truncated: file.truncated,
