@@ -11,7 +11,8 @@
     "bl": "^1.2.1",
     "busboy": "^0.2.9",
     "bytes": "^2.0.0",
-    "debug": "^2.1.0"
+    "debug": "^2.1.0",
+    "@types/busboy": "*"
   },
   "devDependencies": {
     "chai": "^1.9.2",
