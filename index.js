@@ -5,6 +5,15 @@ var Busboy = require('busboy'),
 
 var HARDLIMIT = bytes('250mb');
 
+/**
+ * @description Returns middleware for parsing multipart/form-data bodies. 
+ * Uploaded files are added to req.files while other fields are simply added to req.body.
+ * @example <caption>Example usage that limits file sizes to 3 megabytes:</caption>
+ * const formParser = require('busboy-body-parser'); 
+ * const app = require('express')();
+ * 
+ * app.use(formParser({ limit: '3mb' }));
+ */
 module.exports = function (settings) {
 
     settings = settings || {};
